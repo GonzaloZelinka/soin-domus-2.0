@@ -1,7 +1,7 @@
 import React from 'react'
 
 const Claim = () => {
-  return <Layout></Layout>
+  return <div />
 }
 
 export default Claim
