@@ -18,6 +18,7 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
+    project: './tsconfig.json',
   },
   plugins: ['react'],
   rules: {
@@ -25,5 +26,6 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': 'warn',
     'no-const-assign': 'error',
     'no-console': 'warn',
+    '@typescript-eslint/explicit-function-return-type': 'warn',
   },
 }
