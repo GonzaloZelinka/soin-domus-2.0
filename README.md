@@ -1,5 +1,16 @@
 # DOMUS
 
+## Scripts
+
+```sh
+# Instalar dependencias
+yarn
+# Iniciar frontend
+yarn run fe-dev
+# Iniciar backend
+yarn run be-dev
+```
+
 Estructura del proyecto:
 
 ```sh
