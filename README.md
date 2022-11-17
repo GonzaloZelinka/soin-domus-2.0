@@ -6,9 +6,9 @@
 # Instalar dependencias
 yarn
 # Iniciar frontend
-yarn run fe-dev
+yarn fe-dev
 # Iniciar backend
-yarn run be-dev
+yarn be-dev
 ```
 
 Estructura del proyecto:
