@@ -23,4 +23,17 @@ const nuevoInquilino = async (req: Request, res: Response) => {
   }
 };
 
+const getInfoPropiedad = async (req: Request, res: Response) => {
+  try{
+    const {value, type} = req.body 
+    let PropInq: object[]
+    if (type === 'inquilino') {
+      PropInq = await 
+    }
+    else {
+      ...
+    }
+  }
+}
+
 export { nuevoInquilino };
