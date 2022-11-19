@@ -6,7 +6,9 @@ import {
 
 const router = Router();
 
+// Inquilinos
 router.post("/inquilino", Inquilino.nuevoInquilino);
-router.get("/inquilino", Propiedad.getInfoPropiedad);
+// Propiedades
+router.get("/propiedad", Propiedad.getInfoPropiedad);
 
 export default router;
