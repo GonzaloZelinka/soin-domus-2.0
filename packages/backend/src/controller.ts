@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
-import { Inquilino as MInquilino, Propiedad as MPropiedad } from "./models";
+import { MInquilino, MPropiedad } from "./models";
 
 class Inquilino {
   static nuevoInquilino = async (req: Request, res: Response) => {
