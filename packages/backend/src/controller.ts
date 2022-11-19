@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
-import { Inquilino } from "./models";
+import { Types } from "mongoose";
+import { Inquilino, Propiedad } from "./models";
 
 const nuevoInquilino = async (req: Request, res: Response) => {
   try {
@@ -24,16 +25,44 @@ const nuevoInquilino = async (req: Request, res: Response) => {
 };
 
 const getInfoPropiedad = async (req: Request, res: Response) => {
-  try{
-    const {value, type} = req.body 
-    let PropInq: object[]
-    if (type === 'inquilino') {
-      PropInq = await 
-    }
-    else {
-      ...
-    }
-  }
-}
+  try {
+    // value = inquilino / propiedad
+    const { value, type } = req.body;
 
-export { nuevoInquilino };
+    const propiedadQuery = type === 'inquilino' ? 'inquilino' : 'calle_dir';
+    let valueToSearch: string | Types.ObjectId = value;
+
+    if (type === "inquilino") {
+      const inquilino = await Inquilino.findOne({ dni: value });
+      if (!inquilino) {
+        return res.status(404).json({
+          message: "Inquilino no encontrado",
+          output: null,
+        });
+      }
+      valueToSearch = inquilino._id;
+    }
+
+    const propiedad = await Propiedad.findOne({ [propiedadQuery]: valueToSearch });
+    if (!propiedad) {
+      return res.status(404).json({
+        message: "Propiedad no encontrada",
+        output: null,
+      });
+    }
+
+    return res.status(200).json({
+      message: "Propiedad del inquilino encontrada",
+      output: {
+        propiedad,
+      },
+    });
+  } catch (e) {
+    res.status(500).json({
+      message: "Error al buscar propiedad",
+      output: `${e}`,
+    });
+  }
+};
+
+export { nuevoInquilino, getInfoPropiedad };

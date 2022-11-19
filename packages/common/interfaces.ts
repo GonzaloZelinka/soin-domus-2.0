@@ -16,4 +16,5 @@ export interface IPropiedad {
   cant_bathroom: number,
   area: number,
   pisos: number,
+  inquilino?: string,
 }

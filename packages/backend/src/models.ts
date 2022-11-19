@@ -21,5 +21,7 @@ const SPropiedad = new Schema<IPropiedad>({
   cant_bathroom: { type: Number, required: true },
   area: { type: Number, required: true },
   pisos: { type: Number, required: true },
+  // Referencia al inquilino actual
+  inquilino: { type: Schema.Types.ObjectId, ref: "Inquilino", default: null },
 });
 export const Propiedad = model("Propiedad", SPropiedad);

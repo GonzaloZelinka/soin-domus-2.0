@@ -1,8 +1,12 @@
 import { Router } from "express";
-import { nuevoInquilino } from "./controller";
+import { 
+  nuevoInquilino, 
+  getInfoPropiedad 
+} from "./controller";
 
 const router = Router();
 
-router.post("/inquilinos", nuevoInquilino);
+router.post("/inquilino", nuevoInquilino);
+router.get("/inquilino", getInfoPropiedad);
 
 export default router;
