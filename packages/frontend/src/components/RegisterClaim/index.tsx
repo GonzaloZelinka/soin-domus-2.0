@@ -1,7 +1,7 @@
 import React from 'react'
 import { I_Inquilino } from 'shared-common'
 import { makeStyles } from 'material-ui-core'
-import { Box, Grid } from '@mui/material'
+import { Box, Card, CardContent, Grid, Typography } from '@mui/material'
 
 interface Props {
   inquilino: I_Inquilino | undefined
@@ -26,7 +26,18 @@ const RegisterClaim = ({ inquilino }: Props) => {
     <Box className={classes.mainBox}>
       <Grid container spacing={5} rowSpacing={5}>
         <Grid item xs={6} border="1px solid green"></Grid>
-        <Grid item xs={6} border="1px solid red"></Grid>
+        <Grid item xs={6} border="1px solid red">
+          <Card>
+            <CardContent>
+              <Typography sx={{ fontSize: 14 }} gutterBottom>
+                Inquilino
+              </Typography>
+              <Typography>
+                `${inquilino?.nombre} ${inquilino?.apellido}`
+              </Typography>
+            </CardContent>
+          </Card>
+        </Grid>
         <Grid item xs={12} border="1px solid red"></Grid>
         <Grid item xs={4} border="1px solid green"></Grid>
         <Grid item xs={4} border="1px solid red"></Grid>
