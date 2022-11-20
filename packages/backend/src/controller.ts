@@ -32,18 +32,24 @@ class Propiedad {
       // value = inquilino / propiedad
       const { value, type } = req.query;
 
-      const propiedadQuery = type === "inquilino" ? "inquilino" : "calle_dir";
+      const propiedadQuery = "calle_dir";
       let valueToSearch: string | Types.ObjectId = `${value}` ?? '';
 
       if (type === "inquilino") {
         const inquilino = await MInquilino.findOne({ dni: value }).populate('propiedades');
-        if (!inquilino) {
+        // console.log(inquilino)
+        if (!inquilino || !inquilino.propiedades?.length) {
           return res.status(404).json({
             message: "Inquilino no encontrado",
             output: [],
           });
-        }
-        valueToSearch = inquilino._id;
+        } 
+        return res.status(200).json({
+          message: "Propiedades encontradas",
+          output: {
+            propiedades: inquilino.propiedades
+          },
+        });
       }
       
       const propiedades = await MPropiedad.find({
