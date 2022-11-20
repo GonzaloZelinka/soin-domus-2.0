@@ -10,7 +10,7 @@ const SInquilino = new Schema<I_Inquilino>({
   // Array de "referencias" a Propiedades
   propiedades: [{ type: Schema.Types.ObjectId, ref: "Propiedad", default: [] }],
 });
-export const MInquilino = model("Inquilino", SInquilino);
+export const MInquilino = model("Inquilino", SInquilino, "inquilinos");
 
 const SPropiedad = new Schema<IPropiedad>({
   calle_dir: { type: String, required: true },
@@ -24,4 +24,4 @@ const SPropiedad = new Schema<IPropiedad>({
   // Referencia al inquilino actual
   inquilino: { type: Schema.Types.ObjectId, ref: "Inquilino", default: null },
 });
-export const MPropiedad = model("Propiedad", SPropiedad);
+export const MPropiedad = model("Propiedad", SPropiedad, "propiedades");
