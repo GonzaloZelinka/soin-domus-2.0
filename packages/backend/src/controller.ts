@@ -30,7 +30,7 @@ class Propiedad {
   static getInfoPropiedad = async (req: Request, res: Response) => {
     try {
       // value = inquilino / propiedad
-      const { value, type } = req.body;
+      const { value, type } = req.params;
 
       const propiedadQuery = type === "inquilino" ? "inquilino" : "calle_dir";
       let valueToSearch: string | Types.ObjectId = value;

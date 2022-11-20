@@ -2,15 +2,25 @@ import React from 'react'
 // import logo from './logo.svg'
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
+import Claim from './pages/Claim'
 import Home from './pages/Home'
+import { makeStyles } from 'material-ui-core'
+const useStyles = makeStyles({
+  mainApp: {
+    backgroundColor: 'lightGrey',
+  },
+})
 function App() {
-  // return <Routes></Routes>
+  const classes = useStyles()
   return (
     <>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
+      <div className={classes.mainApp}>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/Reclamo" element={<Claim />} />
+        </Routes>
+      </div>
     </>
   )
 }
