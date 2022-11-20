@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { Box, makeStyles } from 'material-ui-core'
+import { makeStyles } from 'material-ui-core'
 import { DataGrid, GridEnrichedColDef, GridRenderCellParams } from '@mui/x-data-grid'
-import { Button } from '@mui/material'
-import { IParams } from 'shared-common'
+import { Box, Button } from '@mui/material'
+import { I_Inquilino } from 'shared-common'
 import RegisterClaim from '../RegisterClaim'
-import SyncQueryParams from '../SyncQueryParams/SyncQueryParams'
-// import { useLocation } from 'react-router-dom'
+// import SyncQueryParams from '../SyncQueryParams/SyncQueryParams'
+import { getInquilino } from '../../helpers/communications'
 
 const useStyles = makeStyles({
   boxDataGrid: {
@@ -32,7 +32,6 @@ const ClaimTable = ({ rows }: Props) => {
   // const { search } = useLocation()
   const classes = useStyles()
   const [openRegisterClaim, setOpenRegisterClaim] = useState(false)
-  const [infoClaim, setInfoClaim] = useState<IParams>({ properties: '', inquilino: '' })
   const columns: GridEnrichedColDef[] = [
     {
       field: '_id',
@@ -99,9 +98,11 @@ const ClaimTable = ({ rows }: Props) => {
           key={params.id}
           variant="contained"
           onClick={() => {
-            setOpenRegisterClaim(true)
-            setInfoClaim({ properties: params.row._id, inquilino: params.row.inquilino })
-            console.log({ properties: params.row._id, inquilino: params.row.inquilino })
+            handleSearch(params.row.inquilino).catch((error: any) => {
+              console.error(error)
+              setOpenRegisterClaim(false)
+            })
+            // console.log(params.row)
           }}
         >
           Selecionar
@@ -109,12 +110,30 @@ const ClaimTable = ({ rows }: Props) => {
       ),
     },
   ]
-
+  const [resultsQuery, setResultsQuery] = useState<I_Inquilino>()
+  const [errorSearch, setErrorSearch] = useState(false)
+  const handleSearch = async (refInquilino: string) => {
+    let inquilino: I_Inquilino
+    if (refInquilino !== undefined) {
+      try {
+        inquilino = await getInquilino(refInquilino)
+        console.log('INQUILINO ', inquilino)
+        setResultsQuery(inquilino)
+        //   setGlobalParams({ properties: join(nroPropInq, '-') })
+      } catch (e) {
+        console.error(e)
+        setErrorSearch(true)
+      }
+    }
+    if (!errorSearch) {
+      setOpenRegisterClaim(true)
+    }
+  }
   return (
     <>
-      <SyncQueryParams initialParams={infoClaim}></SyncQueryParams>
+      {/* <SyncQueryParams initialParams={infoClaim} /> */}
       {openRegisterClaim ? (
-        <RegisterClaim refInfo={infoClaim} />
+        <RegisterClaim inquilino={resultsQuery} />
       ) : (
         <Box className={classes.boxDataGrid}>
           <DataGrid

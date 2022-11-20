@@ -4,7 +4,7 @@ export interface I_Inquilino {
   apellido: string;
   telefono: string;
   email: string;
-  propiedades: string[];
+  propiedades?: string[];
 }
 
 export interface IPropiedad {
