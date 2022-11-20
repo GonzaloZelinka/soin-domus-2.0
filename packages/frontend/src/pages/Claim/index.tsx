@@ -3,6 +3,10 @@ import React, { useState } from 'react'
 import { makeStyles } from 'material-ui-core'
 import ClaimTable from '../../components/ClaimTable'
 import { getInfoProperty } from '../../helpers/communications'
+import SyncQueryParams from '../../components/SyncQueryParams/SyncQueryParams'
+import { IParams, IPropiedad } from 'shared-common'
+import { join } from 'lodash'
+import { useLocation } from 'react-router-dom'
 const useStyles = makeStyles({
   title: {
     paddingTop: '150px',
@@ -28,30 +32,39 @@ const useStyles = makeStyles({
     width: '100vw',
   },
 })
+const INITIAL_PARAMS: IParams = Object.freeze({
+  calle_dir: '',
+  inquilino: '',
+})
 const Claim = () => {
   const [isSearch, setIsSearch] = useState(false)
   const [property, setProperty] = useState('')
   const [inquilino, setInquilino] = useState('')
   const [errorSearch, setErrorSearch] = useState({ inquilino: false, property: false })
   const [resultsQuery, setResultsQuery] = useState<object[]>([])
-  // const isSearch = true
+  const [globalParams, setGlobalParams] = useState<IParams>(INITIAL_PARAMS)
+  const { search } = useLocation()
   const handleSearch = async () => {
-    let PropInq: object[]
+    let PropInq: IPropiedad[]
     if (property !== '') {
       try {
         PropInq = await getInfoProperty(property, 'property')
         console.log('PROPIEDADES ', PropInq)
         setResultsQuery(PropInq)
+        const nroPropInq = PropInq.map(e => e.inquilino)
+        setGlobalParams({ properties: join(nroPropInq, '-') })
       } catch (e) {
         console.error(e)
         setErrorSearch({ inquilino: true, property: false })
       }
     } else {
-      console.log('ENTRO')
       try {
         PropInq = await getInfoProperty(inquilino, 'inquilino')
         setResultsQuery(PropInq)
         console.log('INQUILINO ', PropInq)
+        if (PropInq[0].inquilino !== undefined) {
+          setGlobalParams({ inquilino: `${PropInq[0].inquilino}` })
+        }
       } catch (e) {
         console.error(e)
         setErrorSearch({ inquilino: false, property: true })
@@ -64,7 +77,8 @@ const Claim = () => {
   const classes = useStyles()
   return (
     <div className={classes.mainApp}>
-      {isSearch ? (
+      <SyncQueryParams initialParams={globalParams} />
+      {isSearch && search !== null ? (
         <ClaimTable rows={resultsQuery} />
       ) : (
         <React.Fragment>

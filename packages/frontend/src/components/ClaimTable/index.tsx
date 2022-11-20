@@ -1,8 +1,11 @@
-// import { AppBar, Container, Toolbar, Stack, MenuItem, Typography } from '@mui/material'
-// import { Link } from 'react-router-dom'
-import React from 'react'
+import React, { useState } from 'react'
 import { Box, makeStyles } from 'material-ui-core'
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid'
+import { DataGrid, GridEnrichedColDef, GridRenderCellParams } from '@mui/x-data-grid'
+import { Button } from '@mui/material'
+import { IParams } from 'shared-common'
+import RegisterClaim from '../RegisterClaim'
+import SyncQueryParams from '../SyncQueryParams/SyncQueryParams'
+import { useLocation } from 'react-router-dom'
 const useStyles = makeStyles({
   boxDataGrid: {
     paddingTop: '100px',
@@ -16,100 +19,129 @@ const useStyles = makeStyles({
   mainApp: {
     backgroundColor: 'lightGrey',
   },
+  selecButton: {
+    background: 'linear-gradient(90deg, rgb(28, 27, 27) 0%, rgb(26, 23, 23) 100%)',
+  },
 })
-const columns: GridColDef[] = [
-  { field: 'id', headerName: 'ID', width: 90 },
-  {
-    field: 'firstName',
-    headerName: 'First name',
-    width: 150,
-    editable: true,
-  },
-  {
-    field: 'lastName',
-    headerName: 'Last name',
-    width: 150,
-    editable: true,
-  },
-  {
-    field: 'age',
-    headerName: 'Age',
-    type: 'number',
-    width: 110,
-    editable: true,
-  },
-  {
-    field: 'fullName',
-    headerName: 'Full name',
-    description: 'This column has a value getter and is not sortable.',
-    sortable: false,
-    width: 160,
-    valueGetter: (params: GridValueGetterParams) =>
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions, @typescript-eslint/strict-boolean-expressions
-      `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-  },
-]
 
-// const rows = [
-//   { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-//   { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-//   { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-//   { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-//   { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-//   { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-//   { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-//   { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-//   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-//   { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-//   { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-//   { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-//   { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-//   { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-//   { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-//   { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-//   { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-//   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-//   { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-//   { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-//   { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-//   { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-//   { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-//   { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-//   { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-//   { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-//   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-//   { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-//   { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-//   { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-//   { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-//   { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-//   { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-//   { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-//   { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-//   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-// ]
 interface Props {
   rows: object[]
 }
 const ClaimTable = ({ rows }: Props) => {
+  const { search } = useLocation()
   const classes = useStyles()
+  const [openRegisterClaim, setOpenRegisterClaim] = useState(false)
+  const [infoClaim, setInfoClaim] = useState<IParams>({ properties: '', inquilino: '' })
+  const columns: GridEnrichedColDef[] = [
+    {
+      field: '_id',
+      headerName: 'ID',
+      width: 150,
+      flex: 0.75,
+      headerAlign: 'center',
+      align: 'center',
+    },
+    {
+      field: 'calle_dir',
+      flex: 0.75,
+      headerName: 'DIRECCION',
+      minWidth: 150,
+      headerAlign: 'center',
+      align: 'center',
+      editable: false,
+    },
+    {
+      field: 'nro_dir',
+      headerName: 'NUMERO',
+      flex: 0.5,
+      type: 'number',
+      headerAlign: 'center',
+      align: 'center',
+      editable: false,
+    },
+    {
+      field: 'localidad',
+      headerName: 'LOCALIDAD',
+      flex: 0.75,
+      headerAlign: 'center',
+      align: 'center',
+      editable: false,
+    },
+    {
+      field: 'area',
+      headerName: 'TAMAÑO (m2)',
+      flex: 0.5,
+      headerAlign: 'center',
+      align: 'center',
+      type: 'number',
+      editable: false,
+    },
+    {
+      field: 'descripcion',
+      headerName: 'DESCRIPCION',
+      // description: 'This column has a value getter and is not sortable.',
+      // sortable: false,
+      flex: 1.5,
+      headerAlign: 'center',
+      editable: false,
+    },
+    {
+      field: 'actions',
+      headerName: 'ACTIONS',
+      width: 150,
+      headerAlign: 'center',
+      align: 'center',
+      renderCell: (params: GridRenderCellParams) => (
+        <Button
+          size="small"
+          className={classes.selecButton}
+          key={params.id}
+          variant="contained"
+          onClick={() => {
+            setOpenRegisterClaim(true)
+            setInfoClaim({ properties: params.row._id, inquilino: params.row.inquilino })
+            console.log({ properties: params.row._id, inquilino: params.row.inquilino })
+          }}
+        >
+          Selecionar
+        </Button>
+      ),
+    },
+  ]
+
   return (
-    <Box className={classes.boxDataGrid}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        checkboxSelection
-        disableSelectionOnClick
-        sx={{
-          boxShadow: 2,
-          border: 1,
-          backgroundColor: 'white',
-          '& .MuiDataGrid-row:hover': {
-            bgcolor: 'lightGrey',
-          },
-        }}
-      />
-    </Box>
+    <>
+      <SyncQueryParams initialParams={infoClaim}></SyncQueryParams>
+      {openRegisterClaim ? (
+        <RegisterClaim refInfo={infoClaim} />
+      ) : (
+        <Box className={classes.boxDataGrid}>
+          <DataGrid
+            getRowId={row => row._id}
+            rows={rows}
+            columns={columns}
+            sx={{
+              boxShadow: 2,
+              border: 1,
+              backgroundColor: 'white',
+              '& .MuiDataGrid-row:hover': {
+                bgcolor: 'lightGrey',
+              },
+              '& .MuiDataGrid-iconSeparator': {
+                display: 'none',
+              },
+              '& .MuiDataGrid-columnHeader, .MuiDataGrid-cell': {
+                borderRight: '1px solid black',
+                borderBottom: '1px solid black',
+              },
+              '& .MuiDataGrid-columnsContainer, .MuiDataGrid-cell': {
+                borderBottom: '1px solid black',
+              },
+            }}
+          />
+        </Box>
+      )}
+    </>
   )
 }
 export default ClaimTable
