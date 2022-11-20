@@ -6,6 +6,6 @@ const router = Router();
 // Inquilinos
 router.post("/inquilinos", Inquilino.nuevoInquilino);
 // Propiedades
-router.get("/propiedades", Propiedad.getInfoPropiedad);
+router.get("/propiedades", Propiedad.getInfoProperty);
 
 export default router;

@@ -27,7 +27,7 @@ class Inquilino {
 }
 
 class Propiedad {
-  static getInfoPropiedad = async (req: Request, res: Response) => {
+  static getInfoProperty = async (req: Request, res: Response) => {
     try {
       // value = inquilino / propiedad
       const { value, type } = req.params;
