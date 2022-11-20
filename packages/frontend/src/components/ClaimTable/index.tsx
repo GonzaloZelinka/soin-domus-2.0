@@ -5,7 +5,8 @@ import { Button } from '@mui/material'
 import { IParams } from 'shared-common'
 import RegisterClaim from '../RegisterClaim'
 import SyncQueryParams from '../SyncQueryParams/SyncQueryParams'
-import { useLocation } from 'react-router-dom'
+// import { useLocation } from 'react-router-dom'
+
 const useStyles = makeStyles({
   boxDataGrid: {
     paddingTop: '100px',
@@ -28,7 +29,7 @@ interface Props {
   rows: object[]
 }
 const ClaimTable = ({ rows }: Props) => {
-  const { search } = useLocation()
+  // const { search } = useLocation()
   const classes = useStyles()
   const [openRegisterClaim, setOpenRegisterClaim] = useState(false)
   const [infoClaim, setInfoClaim] = useState<IParams>({ properties: '', inquilino: '' })

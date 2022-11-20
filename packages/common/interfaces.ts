@@ -16,7 +16,7 @@ export interface IPropiedad {
   cant_bathroom?: number;
   area?: number;
   pisos?: number;
-  inquilino: string;
+  inquilino?: string;
 }
 
 export interface IParams {

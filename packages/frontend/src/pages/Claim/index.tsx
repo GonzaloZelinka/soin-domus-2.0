@@ -63,7 +63,7 @@ const Claim = () => {
         setResultsQuery(PropInq)
         console.log('INQUILINO ', PropInq)
         if (PropInq[0].inquilino !== undefined) {
-          setGlobalParams({ inquilino: `${PropInq[0].inquilino}` })
+          setGlobalParams({ inquilino: `${(PropInq[0].inquilino ?? '')}` })
         }
       } catch (e) {
         console.error(e)

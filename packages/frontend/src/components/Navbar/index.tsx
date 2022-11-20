@@ -57,7 +57,7 @@ const Navbar = () => {
           <Stack direction={'row'} className={classes.navMenu}>
             {optionsAppBar.map((option, index) => (
               <MenuItem key={index} className={classes.navItem}>
-                <Link to={`/${option.path}`} className={classes.navLinks}>
+                <Link onClick={() => window.location.reload()} to={`/${option.path}`} className={classes.navLinks}>
                   <Typography>{option.menuName}</Typography>
                 </Link>
               </MenuItem>
