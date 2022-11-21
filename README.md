@@ -9,6 +9,8 @@ yarn
 yarn fe-dev
 # Iniciar backend
 yarn be-dev
+# Build common
+yarn build-common
 ```
 
 Estructura del proyecto:
@@ -35,4 +37,3 @@ yarn workspace frontend add "nombre_npm_modulo" -D
 # Borrar
 yarn workspace frontend remove "nombre_npm_modulo"
 ```
-
