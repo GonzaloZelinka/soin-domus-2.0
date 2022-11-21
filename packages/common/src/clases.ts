@@ -1,4 +1,4 @@
-import { IPropiedad, IReclamo, I_Inquilino } from "shared-common";
+import { IPropiedad, IReclamo, I_Inquilino } from "./index";
 
 abstract class Reclamo implements IReclamo {
   prioridad: string;
