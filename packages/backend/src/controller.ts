@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
-import { MInquilino, MPropiedad } from "./models";
+import { MInquilino, MPropiedad, MReclamo } from "./models";
 
 class Inquilino {
   static getInquilino = async (req: Request, res: Response) => {
@@ -14,12 +14,7 @@ class Inquilino {
           output: [],
         });
       }
-      return res.status(200).json({
-        message: "inquilino encontrado",
-        output: {
-          inquilino: inquilino,
-        },
-      });
+      return res.status(200).json(inquilino);
     } catch (error) {
       res.status(500).json({
         message: "Error al buscar inquilino",
@@ -83,4 +78,36 @@ class Propiedad {
   };
 }
 
-export { Inquilino, Propiedad };
+class Reclamo {
+  static setReclamo = async (req: Request, res: Response) => {
+    try {
+      const {
+        prioridad,
+        nomReclamante,
+        Telefono,
+        descripcion,
+        atencionRequerida,
+        inicioInconveniente,
+      } = req.body;
+      const reclamo = new MReclamo({
+        prioridad,
+        nomReclamante,
+        Telefono,
+        descripcion,
+        atencionRequerida,
+        inicioInconveniente,
+      });
+      const saved = await reclamo.save();
+      res.status(201).json({
+        message: "Nuevo Reclamo creado",
+        output: saved,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: "Error al crear el Reclamo",
+        output: `${error}`,
+      });
+    }
+  };
+}
+export { Inquilino, Propiedad, Reclamo };

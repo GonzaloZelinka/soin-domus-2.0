@@ -1,5 +1,5 @@
 import { API_URL } from './config'
-import { IPropiedad, I_Inquilino } from 'shared-common'
+import { IPropiedad, IReclamo, I_Inquilino } from 'shared-common'
 import axios from 'axios'
 
 interface IPropiedadResponse {
@@ -22,4 +22,9 @@ const getInquilino = async (refInquilino: string) => {
   const props = await axios.get<I_Inquilino>(`${API_URL}/inquilinos`, { params: { refInquilino } })
   return props.data
 }
-export { getInfoProperty, getInquilino }
+
+const setReclamo = async (reclamo: IReclamo) => {
+  const rec = await axios.post(`${API_URL}/reclamos`, reclamo)
+  return rec.data
+}
+export { getInfoProperty, getInquilino, setReclamo }

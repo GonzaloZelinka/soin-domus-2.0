@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { makeStyles } from 'material-ui-core'
 import { DataGrid, GridEnrichedColDef, GridRenderCellParams } from '@mui/x-data-grid'
 import { Box, Button } from '@mui/material'
-import { I_Inquilino } from 'shared-common'
+import { IPropiedad, I_Inquilino } from 'shared-common'
 import RegisterClaim from '../RegisterClaim'
 // import SyncQueryParams from '../SyncQueryParams/SyncQueryParams'
 import { getInquilino } from '../../helpers/communications'
@@ -32,6 +32,13 @@ const ClaimTable = ({ rows }: Props) => {
   // const { search } = useLocation()
   const classes = useStyles()
   const [openRegisterClaim, setOpenRegisterClaim] = useState(false)
+  const [propiedadSelected, setPropiedadSelected] = useState<IPropiedad>({
+    id: '',
+    calle_dir: '',
+    nro_dir: 0,
+    localidad: '',
+    descripcion: '',
+  })
   const columns: GridEnrichedColDef[] = [
     {
       field: '_id',
@@ -98,10 +105,12 @@ const ClaimTable = ({ rows }: Props) => {
           key={params.id}
           variant="contained"
           onClick={() => {
-            handleSearch(params.row.inquilino).catch((error: any) => {
-              console.error(error)
-              setOpenRegisterClaim(false)
-            })
+            handleSearch(params.row.inquilino)
+              .then(() => setPropiedadSelected(params.row))
+              .catch((error: any) => {
+                console.error(error)
+                setOpenRegisterClaim(false)
+              })
             // console.log(params.row)
           }}
         >
@@ -110,7 +119,14 @@ const ClaimTable = ({ rows }: Props) => {
       ),
     },
   ]
-  const [resultsQuery, setResultsQuery] = useState<I_Inquilino>()
+  const [resultsQuery, setResultsQuery] = useState<I_Inquilino>({
+    id: '',
+    nombre: '',
+    apellido: '',
+    telefono: 0,
+    dni: 0,
+    email: '',
+  })
   const [errorSearch, setErrorSearch] = useState(false)
   const handleSearch = async (refInquilino: string) => {
     let inquilino: I_Inquilino
@@ -133,7 +149,7 @@ const ClaimTable = ({ rows }: Props) => {
     <>
       {/* <SyncQueryParams initialParams={infoClaim} /> */}
       {openRegisterClaim ? (
-        <RegisterClaim inquilino={resultsQuery} />
+        <RegisterClaim inquilino={resultsQuery} propiedad={propiedadSelected} />
       ) : (
         <Box className={classes.boxDataGrid}>
           <DataGrid

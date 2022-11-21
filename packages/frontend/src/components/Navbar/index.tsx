@@ -35,16 +35,6 @@ const useStyles = makeStyles({
     height: '80px',
   },
 })
-const optionsAppBar = [
-  {
-    menuName: 'Home',
-    path: '',
-  },
-  {
-    menuName: 'Reclamo',
-    path: 'Reclamo',
-  },
-]
 const Navbar = () => {
   const classes = useStyles()
   return (
@@ -55,17 +45,20 @@ const Navbar = () => {
             <img src="/SOIN-DOMUS_LOGO.png" alt="" className={classes.navbarLogo} />
           </Stack>
           <Stack direction={'row'} className={classes.navMenu}>
-            {optionsAppBar.map((option, index) => (
-              <MenuItem key={index} className={classes.navItem}>
-                <Link
-                  onClick={() => window.location.reload()}
-                  to={`/${option.path}`}
-                  className={classes.navLinks}
-                >
-                  <Typography>{option.menuName}</Typography>
-                </Link>
-              </MenuItem>
-            ))}
+            <MenuItem key={1} className={classes.navItem}>
+              <Link to={'/'} className={classes.navLinks}>
+                <Typography>Home</Typography>
+              </Link>
+            </MenuItem>
+            <MenuItem key={2} className={classes.navItem}>
+              <Link
+                onClick={() => window.location.pathname === '/Reclamo' && window.location.reload()}
+                to={`/Reclamo`}
+                className={classes.navLinks}
+              >
+                <Typography>Registrar Reclamo</Typography>
+              </Link>
+            </MenuItem>
           </Stack>
         </Toolbar>
       </Container>
