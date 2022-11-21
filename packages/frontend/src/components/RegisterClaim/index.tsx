@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { IPropiedad, I_Inquilino } from 'shared-common'
+import { ReclamoFrontEnd as Reclamo } from '../../helpers/communications'
 import { CardHeader, makeStyles } from 'material-ui-core'
 import {
   Box,
@@ -22,7 +23,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import { setReclamo } from '../../helpers/communications'
 import { isMatch } from 'lodash'
 interface Props {
   inquilino: I_Inquilino
@@ -60,13 +60,15 @@ const RegisterClaim = ({ inquilino, propiedad }: Props) => {
   const handleSend = async () => {
     try {
       const date = new Date()
-      await setReclamo({
+      // const reclamo =
+      await Reclamo.setReclamo({
         ...claimInfo,
         propiedad: propiedad.id,
         inquilino: inquilino.id,
         inicioInconveniente: claimDateStart,
         fechaReclamo: date,
       })
+      // await Propiedad.addReclamo(reclamo)
     } catch (e) {
       setErrorSearch(true)
       setDisabled(true)

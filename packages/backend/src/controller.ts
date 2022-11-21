@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
+import { IReclamo, Reclamo } from "shared-common";
 import { MInquilino, MPropiedad, MReclamo } from "./models";
-
 class Inquilino {
   static getInquilino = async (req: Request, res: Response) => {
     try {
@@ -78,7 +78,7 @@ class Propiedad {
   };
 }
 
-class Reclamo {
+class ReclamoBackEnd extends Reclamo {
   static setReclamo = async (req: Request, res: Response) => {
     try {
       const {
@@ -110,4 +110,4 @@ class Reclamo {
     }
   };
 }
-export { Inquilino, Propiedad, Reclamo };
+export { Inquilino, Propiedad, ReclamoBackEnd };

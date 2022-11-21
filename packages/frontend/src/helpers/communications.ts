@@ -1,5 +1,5 @@
 import { API_URL } from './config'
-import { IPropiedad, IReclamo, I_Inquilino } from 'shared-common'
+import { IPropiedad, IReclamo, I_Inquilino, Reclamo } from 'shared-common'
 import axios from 'axios'
 
 interface IPropiedadResponse {
@@ -27,4 +27,11 @@ const setReclamo = async (reclamo: IReclamo) => {
   const rec = await axios.post(`${API_URL}/reclamos`, reclamo)
   return rec.data
 }
-export { getInfoProperty, getInquilino, setReclamo }
+class ReclamoFrontEnd extends Reclamo {
+  static setReclamo = async (reclamo: IReclamo) => {
+    const rec = await axios.post(`${API_URL}/reclamos`, reclamo)
+    return rec.data
+  }
+}
+
+export { getInfoProperty, getInquilino, setReclamo, ReclamoFrontEnd }
