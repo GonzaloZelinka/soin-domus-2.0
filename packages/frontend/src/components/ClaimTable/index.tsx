@@ -109,7 +109,6 @@ const ClaimTable = ({ rows }: Props) => {
                 console.error(error)
                 setOpenRegisterClaim(false)
               })
-            // console.log(params.row)
           }}
         >
           Selecionar
@@ -131,7 +130,6 @@ const ClaimTable = ({ rows }: Props) => {
     if (refInquilino !== undefined) {
       try {
         inquilino = await Inquilino.getInquilino(refInquilino)
-        console.log('INQUILINO ', inquilino)
         setResultsQuery(inquilino)
       } catch (e) {
         console.error(e)

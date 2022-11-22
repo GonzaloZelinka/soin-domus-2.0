@@ -36,7 +36,6 @@ class PropiedadBackEnd extends Propiedad {
         const inquilino = await MInquilino.findOne({
           dni: { $eq: value },
         }).populate("propiedades");
-        console.log(inquilino);
         if (!inquilino || !inquilino.propiedades?.length) {
           return res.status(404).json({
             message: "Inquilino no encontrado",
@@ -76,16 +75,14 @@ class PropiedadBackEnd extends Propiedad {
     }
   };
   static añadirReclamo = async (req: Request, res: Response) => {
-    console.log("hola ", req.body);
     try {
-      const { propiedad, reclamo } = req.body;
+      const { reclamo, propiedad } = req.body;
       const propiedadResult = await MPropiedad.updateMany(
         {
-          _id: propiedad,
+          _id: `${propiedad}`,
         },
         { $push: { reclamos: reclamo } }
       );
-      console.log(propiedadResult);
       res.status(201).json({
         message: "Reclamo añadido",
         output: propiedadResult,
@@ -110,6 +107,7 @@ class ReclamoBackEnd extends Reclamo {
         atencionRequerida,
         inicioInconveniente,
         propiedad,
+        fechaReclamo,
       } = req.body;
       const reclamo = new MReclamo({
         prioridad,
@@ -119,6 +117,7 @@ class ReclamoBackEnd extends Reclamo {
         atencionRequerida,
         inicioInconveniente,
         propiedad,
+        fechaReclamo,
       });
       const saved = await reclamo.save();
       // await Propiedad.añadirReclamo(propiedad, reclamo.id)

@@ -52,6 +52,7 @@ const useStyles = makeStyles({
 const RegisterClaim = ({ inquilino, propiedad }: Props) => {
   const classes = useStyles()
   const [expandedProp, setExpandedProp] = useState(false)
+  const [expandedInquilino, setExpandedInquilino] = useState(false)
   const [claimInfo, setClaimInfo] = useState({
     prioridad: '',
     atencionRequerida: '',
@@ -63,12 +64,10 @@ const RegisterClaim = ({ inquilino, propiedad }: Props) => {
   const [errorSearch, setErrorSearch] = useState(false)
   const [openSnackbar, setOpenSnackbar] = useState(false)
   const [idReclamo, setIdReclamo] = useState('')
-  console.log('PROPIEDAD ', propiedad._id)
   const handleSend = async () => {
     try {
       const date = new Date()
 
-      // const reclamo =
       if (claimDateStart !== null && propiedad._id !== undefined) {
         await Reclamo.setReclamo({
           ...claimInfo,
@@ -78,7 +77,9 @@ const RegisterClaim = ({ inquilino, propiedad }: Props) => {
         })
           .then(response => setIdReclamo(response.output._id))
           .catch(error => console.error(error))
-        await Propiedad.añadirReclamo(idReclamo, propiedad._id).catch(error => console.error(error))
+        await Propiedad.añadirReclamo({ reclamo: idReclamo, propiedad: propiedad._id }).catch(
+          error => console.error(error),
+        )
       }
     } catch (e) {
       setErrorSearch(true)
@@ -153,20 +154,20 @@ const RegisterClaim = ({ inquilino, propiedad }: Props) => {
                         </Typography>
                         <Typography>{propiedad.descripcion}</Typography>
                       </Grid>
-                      <Grid item xs={12}>
-                        <Typography className={classes.type} sx={{ fontSize: 14 }}>
-                          ID propiedad
-                        </Typography>
-                        <Typography>{propiedad._id}</Typography>
-                      </Grid>
                       <Grid item container direction="row" xs={12}>
                         <Grid item xs={6}>
+                          <Typography className={classes.type} sx={{ fontSize: 14 }}>
+                            ID propiedad
+                          </Typography>
+                          <Typography>{propiedad._id}</Typography>
+                        </Grid>
+                        <Grid item xs={3}>
                           <Typography className={classes.type} sx={{ fontSize: 14 }}>
                             Cantidad de Habitaciones
                           </Typography>
                           <Typography>{propiedad.cant_hab}</Typography>
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={3}>
                           <Typography className={classes.type} sx={{ fontSize: 14 }}>
                             Cantidad de Baños
                           </Typography>
@@ -183,32 +184,52 @@ const RegisterClaim = ({ inquilino, propiedad }: Props) => {
                 <CardHeader title="DESCRIPCION CLIENTE" />
                 <CardContent>
                   <Grid container direction="row">
-                    <Grid item xs={3}>
+                    <Grid item xs={6}>
                       <Typography className={classes.type} sx={{ fontSize: 14 }}>
                         Inquilino
                       </Typography>
                       <Typography>{`${inquilino.nombre} ${inquilino.apellido}`}</Typography>
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={6}>
                       <Typography className={classes.type} sx={{ fontSize: 14 }}>
                         DNI
                       </Typography>
                       <Typography>{inquilino.dni}</Typography>
                     </Grid>
-                    <Grid item xs={3}>
-                      <Typography className={classes.type} sx={{ fontSize: 14 }}>
-                        Telefono
-                      </Typography>
-                      <Typography>{`+54${inquilino.telefono}`}</Typography>
-                    </Grid>
-                    <Grid item xs={3}>
-                      <Typography className={classes.type} sx={{ fontSize: 14 }}>
-                        email
-                      </Typography>
-                      <Typography>{inquilino.email}</Typography>
-                    </Grid>
                   </Grid>
                 </CardContent>
+                <CardActions disableSpacing>
+                  <IconButton
+                    aria-expanded={expandedProp}
+                    onClick={() => {
+                      setExpandedInquilino(!expandedInquilino)
+                    }}
+                    aria-label="show more"
+                    sx={{
+                      transform: !expandedInquilino ? 'rotate(0deg)' : 'rotate(180deg)',
+                    }}
+                  >
+                    <ExpandMoreIcon />
+                  </IconButton>
+                </CardActions>
+                <Collapse in={expandedInquilino} timeout="auto" unmountOnExit>
+                  <CardContent>
+                    <Grid container direction="row" spacing={2}>
+                      <Grid item xs={6}>
+                        <Typography className={classes.type} sx={{ fontSize: 14 }}>
+                          Telefono
+                        </Typography>
+                        <Typography>{`+54${inquilino.telefono}`}</Typography>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <Typography className={classes.type} sx={{ fontSize: 14 }}>
+                          Email
+                        </Typography>
+                        <Typography>{inquilino.email}</Typography>
+                      </Grid>
+                    </Grid>
+                  </CardContent>
+                </Collapse>
               </Card>
             </Grid>
           </Grid>
@@ -305,12 +326,19 @@ const RegisterClaim = ({ inquilino, propiedad }: Props) => {
                         <DatePicker
                           label="Seleccione la fecha en que comenzo a suceder el inconveniente"
                           value={claimDateStart}
+                          disableFuture
                           onChange={(newValue: Date | null) => {
-                            if (newValue !== null) {
+                            if (newValue !== null && newValue <= new Date()) {
                               setClaimDateStart(newValue)
                             }
                           }}
-                          renderInput={params => <TextField {...params} fullWidth />}
+                          renderInput={params => (
+                            <TextField
+                              {...params}
+                              inputProps={{ ...params.inputProps, readOnly: true }}
+                              fullWidth
+                            />
+                          )}
                         />
                       </LocalizationProvider>
                     </Grid>

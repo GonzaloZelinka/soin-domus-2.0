@@ -41,8 +41,8 @@ class PropiedadFrontEnd extends Propiedad {
     return output?.propiedades ?? []
   }
 
-  static añadirReclamo = async (propiedad: string, reclamo: string) => {
-    const props = await axios.post(`${API_URL}/propiedades/reclamos`, { propiedad, reclamo })
+  static añadirReclamo = async (value: { propiedad: string; reclamo: string }) => {
+    const props = await axios.post(`${API_URL}/propiedades/reclamos`, value)
     return props.data
   }
 }

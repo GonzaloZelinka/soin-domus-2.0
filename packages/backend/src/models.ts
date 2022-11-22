@@ -34,5 +34,6 @@ const SReclamo = new Schema<IReclamo>({
   atencionRequerida: { type: String, required: true },
   inicioInconveniente: { type: Date, required: true },
   propiedad: { type: Schema.Types.ObjectId, ref: "Propiedad", default: null },
+  fechaReclamo: { type: Date, requered: true },
 });
 export const MReclamo = model("Reclamo", SReclamo, "reclamos");
