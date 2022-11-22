@@ -11,6 +11,7 @@
   "scripts": {
     "start": "yarn run fe-dev",
     "fe-dev": "yarn workspace frontend start",
-    "be-dev": "yarn workspace backend start"
+    "be-dev": "yarn workspace backend start",
+    "build-common": "yarn workspace shared-common build"
   }
 }

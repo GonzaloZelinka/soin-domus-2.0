@@ -13,6 +13,7 @@ module.exports = {
     'standard-with-typescript',
     'standard',
     'eslint-config-prettier',
+    'plugin:react-hooks/recommended',
   ],
   overrides: [],
   parserOptions: {
@@ -28,6 +29,6 @@ module.exports = {
     'no-const-assign': 'error',
     'no-console': 'warn',
     '@typescript-eslint/explicit-function-return-type': 'off',
-    'camelcase': 'off',
+    camelcase: 'off',
   },
 }

@@ -2,7 +2,7 @@ import { AppBar, Container, Toolbar, Stack, MenuItem, Typography } from '@mui/ma
 import { Link } from 'react-router-dom'
 import React from 'react'
 import { makeStyles } from 'material-ui-core'
-
+import { UserFrontEnd as User } from '../../helpers/communications'
 const useStyles = makeStyles({
   navbar: {
     background: 'linear-gradient(90deg, rgb(28, 27, 27) 0%, rgb(26, 23, 23) 100%)',
@@ -35,17 +35,12 @@ const useStyles = makeStyles({
     height: '80px',
   },
 })
-const optionsAppBar = [
-  {
-    menuName: 'Home',
-    path: '',
-  },
-  {
-    menuName: 'Reclamo',
-    path: 'Reclamo',
-  },
-]
 const Navbar = () => {
+  const handleUser = async () => {
+    try {
+      return await User.getUserAutenticado()
+    } catch (e) {}
+  }
   const classes = useStyles()
   return (
     <AppBar className={classes.navbar}>
@@ -55,13 +50,20 @@ const Navbar = () => {
             <img src="/SOIN-DOMUS_LOGO.png" alt="" className={classes.navbarLogo} />
           </Stack>
           <Stack direction={'row'} className={classes.navMenu}>
-            {optionsAppBar.map((option, index) => (
-              <MenuItem key={index} className={classes.navItem}>
-                <Link to={`/${option.path}`} className={classes.navLinks}>
-                  <Typography>{option.menuName}</Typography>
-                </Link>
-              </MenuItem>
-            ))}
+            <MenuItem key={1} className={classes.navItem}>
+              <Link
+                onClick={() => {
+                  handleUser()
+                    .then(user => console.log('USER AUTENTICADO ', user))
+                    .catch(error => console.error(error))
+                  window.location.pathname === '/Reclamo' && window.location.reload()
+                }}
+                to={`/Reclamo`}
+                className={classes.navLinks}
+              >
+                <Typography>Registrar Reclamo</Typography>
+              </Link>
+            </MenuItem>
           </Stack>
         </Toolbar>
       </Container>
