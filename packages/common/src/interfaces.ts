@@ -1,6 +1,6 @@
 // Tipado
 export interface I_Inquilino {
-  id: string;
+  _id?: string;
   nombre: string;
   apellido: string;
   telefono: number;
@@ -10,7 +10,7 @@ export interface I_Inquilino {
 }
 
 export interface IPropiedad {
-  id: string;
+  _id?: string;
   calle_dir: string;
   nro_dir: number;
   localidad: string;
@@ -20,9 +20,11 @@ export interface IPropiedad {
   area?: number;
   pisos?: number;
   inquilino?: string;
+  reclamos?: string[];
 }
 
 export interface IReclamo {
+  _id?: string;
   prioridad: string;
   reclamante: string;
   descripcion: string;
@@ -30,10 +32,13 @@ export interface IReclamo {
   inicioInconveniente: Date;
   fechaReclamo: Date;
   propiedad?: string;
-  inquilino?: string;
 }
 
 export interface IParams {
   inquilino?: string;
   properties?: string;
+}
+
+export interface IUser {
+  _id?: string;
 }

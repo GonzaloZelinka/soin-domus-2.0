@@ -19,9 +19,9 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.3",
     "react-scripts": "5.0.1",
+    "shared-common": "*",
     "typescript": "*",
-    "web-vitals": "^2.1.4",
-    "shared-common": "*"
+    "web-vitals": "^2.1.4"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -62,7 +62,6 @@
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.31.10",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "lodash.ismatch": "^4.4.0",
     "lodash.pickby": "^4.6.0",
     "prettier": "^2.7.1",
     "qs-stringify": "^1.2.1"

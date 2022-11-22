@@ -9,6 +9,7 @@ const SInquilino = new Schema<I_Inquilino>({
   email: { type: String, required: true },
   // Array de "referencias" a Propiedades
   propiedades: [{ type: Schema.Types.ObjectId, ref: "Propiedad", default: [] }],
+  dni: { type: Number, required: true },
 });
 export const MInquilino = model("Inquilino", SInquilino, "inquilinos");
 
@@ -23,6 +24,7 @@ const SPropiedad = new Schema<IPropiedad>({
   pisos: { type: Number, required: true },
   // Referencia al inquilino actual
   inquilino: { type: Schema.Types.ObjectId, ref: "Inquilino", default: null },
+  reclamos: [{ type: Schema.Types.ObjectId, ref: "Reclamos", default: [] }],
 });
 export const MPropiedad = model("Propiedad", SPropiedad, "propiedades");
 
@@ -32,6 +34,5 @@ const SReclamo = new Schema<IReclamo>({
   atencionRequerida: { type: String, required: true },
   inicioInconveniente: { type: Date, required: true },
   propiedad: { type: Schema.Types.ObjectId, ref: "Propiedad", default: null },
-  inquilino: { type: Schema.Types.ObjectId, ref: "Inquilino", default: null },
 });
 export const MReclamo = model("Reclamo", SReclamo, "reclamos");

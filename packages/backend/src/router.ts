@@ -1,12 +1,17 @@
 import { Router } from "express";
-import { Inquilino, Propiedad, ReclamoBackEnd } from "./controller";
+import {
+  InquilinoBackEnd,
+  PropiedadBackEnd,
+  ReclamoBackEnd,
+} from "./controller";
 
 const router = Router();
 
 // Inquilinos
-router.get("/inquilinos", Inquilino.getInquilino);
+router.get("/inquilinos", InquilinoBackEnd.getInquilino);
 // Propiedades
-router.get("/propiedades", Propiedad.getInfoProperty);
+router.get("/propiedades", PropiedadBackEnd.getInfoProperty);
+router.post("/propiedades/reclamos", PropiedadBackEnd.añadirReclamo);
 // Reclamos
-router.post("/reclamo", ReclamoBackEnd.setReclamo);
+router.post("/reclamos", ReclamoBackEnd.setReclamo);
 export default router;

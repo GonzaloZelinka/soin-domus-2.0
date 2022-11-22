@@ -1,12 +1,11 @@
-import { Box, Button, Grid, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, Grid, Snackbar, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 import { makeStyles } from 'material-ui-core'
 import ClaimTable from '../../components/ClaimTable'
-import { getInfoProperty } from '../../helpers/communications'
+import { PropiedadFrontEnd as Propiedad } from '../../helpers/communications'
 import SyncQueryParams from '../../components/SyncQueryParams/SyncQueryParams'
 import { IParams, IPropiedad } from 'shared-common'
 import { join } from 'lodash'
-import { useLocation } from 'react-router-dom'
 const useStyles = makeStyles({
   title: {
     paddingTop: '150px',
@@ -40,45 +39,41 @@ const Claim = () => {
   const [isSearch, setIsSearch] = useState(false)
   const [property, setProperty] = useState('')
   const [inquilino, setInquilino] = useState('')
-  const [errorSearch, setErrorSearch] = useState({ inquilino: false, property: false })
   const [resultsQuery, setResultsQuery] = useState<object[]>([])
   const [globalParams, setGlobalParams] = useState<IParams>(INITIAL_PARAMS)
-  const { search } = useLocation()
+  const [openSnackbar, setOpenSnackbar] = useState(false)
   const handleSearch = async () => {
     let PropInq: IPropiedad[]
     if (property !== '') {
       try {
-        PropInq = await getInfoProperty(property, 'property')
-        console.log('PROPIEDADES ', PropInq)
+        PropInq = await Propiedad.getInfoProperty(property, 'property')
         setResultsQuery(PropInq)
+        setIsSearch(true)
         const nroPropInq = PropInq.map(e => e.inquilino)
         setGlobalParams({ properties: join(nroPropInq, '-') })
       } catch (e) {
-        console.error(e)
-        setErrorSearch({ inquilino: true, property: false })
+        setIsSearch(false)
+        setOpenSnackbar(true)
       }
     } else {
       try {
-        PropInq = await getInfoProperty(inquilino, 'inquilino')
+        PropInq = await Propiedad.getInfoProperty(inquilino, 'inquilino')
         setResultsQuery(PropInq)
-        console.log('INQUILINO ', PropInq)
+        setIsSearch(true)
         if (PropInq[0].inquilino !== undefined) {
-          setGlobalParams({ inquilino: `${(PropInq[0].inquilino ?? '')}` })
+          setGlobalParams({ inquilino: `${PropInq[0].inquilino ?? ''}` })
         }
       } catch (e) {
-        console.error(e)
-        setErrorSearch({ inquilino: false, property: true })
+        setIsSearch(false)
+        setOpenSnackbar(true)
       }
-    }
-    if (!(errorSearch.inquilino && errorSearch.property)) {
-      setIsSearch(true)
     }
   }
   const classes = useStyles()
   return (
     <div className={classes.mainApp}>
       <SyncQueryParams initialParams={globalParams} />
-      {isSearch && search !== null ? (
+      {isSearch ? (
         <ClaimTable rows={resultsQuery} />
       ) : (
         <React.Fragment>
@@ -97,8 +92,6 @@ const Claim = () => {
             <Grid item></Grid>
             <Grid item className={classes.input}>
               <TextField
-                error={errorSearch.property}
-                helperText={errorSearch.property && 'Direccion Incorrecto'}
                 fullWidth
                 label="DIRECCION DE PROPIEDAD"
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
@@ -108,14 +101,11 @@ const Claim = () => {
             </Grid>
             <Grid item className={classes.input}>
               <TextField
-                error={errorSearch.inquilino}
-                helperText={errorSearch.inquilino && 'DNI Incorrecto'}
                 type="number"
                 fullWidth
                 label="DNI INQUILINO"
                 onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                   setInquilino(event.target.value)
-                  console.log('INQUILINO ', event.target.value)
                 }}
               />
             </Grid>
@@ -125,14 +115,37 @@ const Claim = () => {
                 fullWidth
                 className={classes.mainButton}
                 onClick={() => {
-                  handleSearch().catch(error => {
-                    console.error(error)
-                    setIsSearch(false)
+                  handleSearch().catch(() => {
+                    setIsSearch(true)
+                    setOpenSnackbar(true)
                   })
                 }}
               >
                 BUSCAR
               </Button>
+              <Snackbar
+                open={openSnackbar}
+                autoHideDuration={3000}
+                onClose={(event?: React.SyntheticEvent | Event, reason?: string) => {
+                  if (reason === 'clickaway') {
+                    return
+                  }
+                  setOpenSnackbar(false)
+                }}
+              >
+                <Alert
+                  onClose={(_event?: React.SyntheticEvent | Event, reason?: string) => {
+                    if (reason === 'clickaway') {
+                      return
+                    }
+                    setOpenSnackbar(false)
+                  }}
+                  severity="error"
+                  variant="filled"
+                >
+                  No encontramos coincidencias
+                </Alert>
+              </Snackbar>
             </Grid>
           </Grid>
         </React.Fragment>

@@ -3,7 +3,6 @@ import React from 'react'
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Claim from './pages/Claim'
-import Home from './pages/Home'
 import { makeStyles } from 'material-ui-core'
 const useStyles = makeStyles({
   mainApp: {
@@ -17,7 +16,6 @@ function App() {
       <div className={classes.mainApp}>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Home />} />
           <Route path="/Reclamo" element={<Claim />} />
         </Routes>
       </div>

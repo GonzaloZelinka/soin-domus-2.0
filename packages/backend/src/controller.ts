@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
 import { Types } from "mongoose";
-import { IReclamo, Reclamo } from "shared-common";
+import { Propiedad, Reclamo, Inquilino } from "shared-common";
 import { MInquilino, MPropiedad, MReclamo } from "./models";
-class Inquilino {
+class InquilinoBackEnd extends Inquilino {
   static getInquilino = async (req: Request, res: Response) => {
     try {
       const { refInquilino } = req.query;
@@ -24,20 +24,19 @@ class Inquilino {
   };
 }
 
-class Propiedad {
+class PropiedadBackEnd extends Propiedad {
   static getInfoProperty = async (req: Request, res: Response) => {
     try {
       // value = inquilino / propiedad
       const { value, type } = req.query;
-
       const propiedadQuery = "calle_dir";
       let valueToSearch: string | Types.ObjectId = `${value}` ?? "";
 
       if (type === "inquilino") {
-        const inquilino = await MInquilino.findOne({ dni: value }).populate(
-          "propiedades"
-        );
-        // console.log(inquilino)
+        const inquilino = await MInquilino.findOne({
+          dni: { $eq: value },
+        }).populate("propiedades");
+        console.log(inquilino);
         if (!inquilino || !inquilino.propiedades?.length) {
           return res.status(404).json({
             message: "Inquilino no encontrado",
@@ -76,6 +75,28 @@ class Propiedad {
       });
     }
   };
+  static añadirReclamo = async (req: Request, res: Response) => {
+    console.log("hola ", req.body);
+    try {
+      const { propiedad, reclamo } = req.body;
+      const propiedadResult = await MPropiedad.updateMany(
+        {
+          _id: propiedad,
+        },
+        { $push: { reclamos: reclamo } }
+      );
+      console.log(propiedadResult);
+      res.status(201).json({
+        message: "Reclamo añadido",
+        output: propiedadResult,
+      });
+    } catch (error) {
+      res.status(500).json({
+        message: "Error al crear el Reclamo",
+        output: `${error}`,
+      });
+    }
+  };
 }
 
 class ReclamoBackEnd extends Reclamo {
@@ -88,6 +109,7 @@ class ReclamoBackEnd extends Reclamo {
         descripcion,
         atencionRequerida,
         inicioInconveniente,
+        propiedad,
       } = req.body;
       const reclamo = new MReclamo({
         prioridad,
@@ -96,8 +118,10 @@ class ReclamoBackEnd extends Reclamo {
         descripcion,
         atencionRequerida,
         inicioInconveniente,
+        propiedad,
       });
       const saved = await reclamo.save();
+      // await Propiedad.añadirReclamo(propiedad, reclamo.id)
       res.status(201).json({
         message: "Nuevo Reclamo creado",
         output: saved,
@@ -110,4 +134,4 @@ class ReclamoBackEnd extends Reclamo {
     }
   };
 }
-export { Inquilino, Propiedad, ReclamoBackEnd };
+export { InquilinoBackEnd, PropiedadBackEnd, ReclamoBackEnd };

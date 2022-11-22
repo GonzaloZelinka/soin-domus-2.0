@@ -4,8 +4,7 @@ import { DataGrid, GridEnrichedColDef, GridRenderCellParams } from '@mui/x-data-
 import { Box, Button } from '@mui/material'
 import { IPropiedad, I_Inquilino } from 'shared-common'
 import RegisterClaim from '../RegisterClaim'
-// import SyncQueryParams from '../SyncQueryParams/SyncQueryParams'
-import { getInquilino } from '../../helpers/communications'
+import { InquilinoFrontEnd as Inquilino } from '../../helpers/communications'
 
 const useStyles = makeStyles({
   boxDataGrid: {
@@ -29,11 +28,10 @@ interface Props {
   rows: object[]
 }
 const ClaimTable = ({ rows }: Props) => {
-  // const { search } = useLocation()
   const classes = useStyles()
   const [openRegisterClaim, setOpenRegisterClaim] = useState(false)
   const [propiedadSelected, setPropiedadSelected] = useState<IPropiedad>({
-    id: '',
+    _id: '',
     calle_dir: '',
     nro_dir: 0,
     localidad: '',
@@ -42,7 +40,7 @@ const ClaimTable = ({ rows }: Props) => {
   const columns: GridEnrichedColDef[] = [
     {
       field: '_id',
-      headerName: 'ID',
+      headerName: 'ID PROPIEDAD',
       width: 150,
       flex: 0.75,
       headerAlign: 'center',
@@ -120,7 +118,7 @@ const ClaimTable = ({ rows }: Props) => {
     },
   ]
   const [resultsQuery, setResultsQuery] = useState<I_Inquilino>({
-    id: '',
+    _id: '',
     nombre: '',
     apellido: '',
     telefono: 0,
@@ -132,10 +130,9 @@ const ClaimTable = ({ rows }: Props) => {
     let inquilino: I_Inquilino
     if (refInquilino !== undefined) {
       try {
-        inquilino = await getInquilino(refInquilino)
+        inquilino = await Inquilino.getInquilino(refInquilino)
         console.log('INQUILINO ', inquilino)
         setResultsQuery(inquilino)
-        //   setGlobalParams({ properties: join(nroPropInq, '-') })
       } catch (e) {
         console.error(e)
         setErrorSearch(true)
@@ -147,7 +144,6 @@ const ClaimTable = ({ rows }: Props) => {
   }
   return (
     <>
-      {/* <SyncQueryParams initialParams={infoClaim} /> */}
       {openRegisterClaim ? (
         <RegisterClaim inquilino={resultsQuery} propiedad={propiedadSelected} />
       ) : (

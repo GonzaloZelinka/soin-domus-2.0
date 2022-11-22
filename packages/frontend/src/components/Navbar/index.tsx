@@ -2,7 +2,7 @@ import { AppBar, Container, Toolbar, Stack, MenuItem, Typography } from '@mui/ma
 import { Link } from 'react-router-dom'
 import React from 'react'
 import { makeStyles } from 'material-ui-core'
-
+import { UserFrontEnd as User } from '../../helpers/communications'
 const useStyles = makeStyles({
   navbar: {
     background: 'linear-gradient(90deg, rgb(28, 27, 27) 0%, rgb(26, 23, 23) 100%)',
@@ -36,6 +36,11 @@ const useStyles = makeStyles({
   },
 })
 const Navbar = () => {
+  const handleUser = async () => {
+    try {
+      return await User.getUserAutenticado()
+    } catch (e) {}
+  }
   const classes = useStyles()
   return (
     <AppBar className={classes.navbar}>
@@ -46,13 +51,13 @@ const Navbar = () => {
           </Stack>
           <Stack direction={'row'} className={classes.navMenu}>
             <MenuItem key={1} className={classes.navItem}>
-              <Link to={'/'} className={classes.navLinks}>
-                <Typography>Home</Typography>
-              </Link>
-            </MenuItem>
-            <MenuItem key={2} className={classes.navItem}>
               <Link
-                onClick={() => window.location.pathname === '/Reclamo' && window.location.reload()}
+                onClick={() => {
+                  handleUser()
+                    .then(user => console.log('USER AUTENTICADO ', user))
+                    .catch(error => console.error(error))
+                  window.location.pathname === '/Reclamo' && window.location.reload()
+                }}
                 to={`/Reclamo`}
                 className={classes.navLinks}
               >
