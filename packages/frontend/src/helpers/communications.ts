@@ -6,11 +6,11 @@ import {
   Reclamo,
   Propiedad,
   Inquilino,
-  User,
+  CTRLSesion,
 } from 'shared-common'
 import axios from 'axios'
 
-class UserFrontEnd extends User {
+class CTRLSesionFrontEnd extends CTRLSesion {
   static getUserAutenticado = async () => {
     return { _id: '1234' }
   }
@@ -53,4 +53,4 @@ class ReclamoFrontEnd extends Reclamo {
   }
 }
 
-export { PropiedadFrontEnd, InquilinoFrontEnd, ReclamoFrontEnd, UserFrontEnd }
+export { PropiedadFrontEnd, InquilinoFrontEnd, ReclamoFrontEnd, CTRLSesionFrontEnd }

@@ -120,7 +120,6 @@ class ReclamoBackEnd extends Reclamo {
         fechaReclamo,
       });
       const saved = await reclamo.save();
-      // await Propiedad.añadirReclamo(propiedad, reclamo.id)
       res.status(201).json({
         message: "Nuevo Reclamo creado",
         output: saved,
