@@ -18,6 +18,8 @@ const useStyles = makeStyles({
   },
   mainApp: {
     backgroundColor: 'lightGrey',
+    height: "100vh",
+    width: "100%",
   },
   selecButton: {
     background: 'linear-gradient(90deg, rgb(28, 27, 27) 0%, rgb(26, 23, 23) 100%)',
@@ -141,7 +143,7 @@ const ClaimTable = ({ rows }: Props) => {
     }
   }
   return (
-    <>
+    <div className={classes.mainApp}>
       {openRegisterClaim ? (
         <RegisterClaim inquilino={resultsQuery} propiedad={propiedadSelected} />
       ) : (
@@ -171,7 +173,7 @@ const ClaimTable = ({ rows }: Props) => {
           />
         </Box>
       )}
-    </>
+    </div>
   )
 }
 export default ClaimTable

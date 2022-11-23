@@ -34,14 +34,17 @@ interface Props {
 }
 const useStyles = makeStyles({
   mainBox: {
-    paddingTop: '100px',
-    height: '80vh',
-    width: '90vw',
-    position: 'absolute',
-    left: '50%',
-    top: '50%',
-    transform: 'translate(-50%, -50%)',
-    flexGrow: 1,
+    paddingTop: '120px',
+    height: '85%',
+    width: '90%',
+  },
+  main :{
+    backgroundColor: 'lightGrey',
+    height: '130%',
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   type: {
     color: 'grey',
@@ -95,9 +98,9 @@ const RegisterClaim = ({ inquilino, propiedad }: Props) => {
     }
   }, [claimInfo, claimDateStart])
   return (
-    <>
+<div className={classes.main}>
       <Box className={classes.mainBox}>
-        <Grid container direction="column" spacing={2}>
+        <Grid container direction="column" spacing={2} justifyContent="center" alignItems="center">
           <Grid item xs={12} sm container direction="row" spacing={2}>
             <Grid item xs={6}>
               <Card>
@@ -440,7 +443,7 @@ const RegisterClaim = ({ inquilino, propiedad }: Props) => {
           </Grid>
         </Grid>
       </Box>
-    </>
+    </div>
   )
 }
 

@@ -14,8 +14,9 @@ const useStyles = makeStyles({
     justifyContent: 'center',
   },
   mainGrid: {
-    height: '100vh',
-    width: '50vw',
+    height: '100%',
+    backgroundColor: 'lightGrey',
+    width: '50%',
     paddingTop: '5%',
   },
   input: {
@@ -27,7 +28,7 @@ const useStyles = makeStyles({
   },
   mainApp: {
     backgroundColor: 'lightGrey',
-    height: '100vh',
+    height: '75vh',
     width: '100vw',
   },
 })
