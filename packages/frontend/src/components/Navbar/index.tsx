@@ -2,7 +2,7 @@ import { AppBar, Container, Toolbar, Stack, MenuItem, Typography } from '@mui/ma
 import { Link } from 'react-router-dom'
 import React from 'react'
 import { makeStyles } from 'material-ui-core'
-import { UserFrontEnd as User } from '../../helpers/communications'
+import { CTRLSesionFrontEnd } from '../../helpers/communications'
 const useStyles = makeStyles({
   navbar: {
     background: 'linear-gradient(90deg, rgb(28, 27, 27) 0%, rgb(26, 23, 23) 100%)',
@@ -38,7 +38,7 @@ const useStyles = makeStyles({
 const Navbar = () => {
   const handleUser = async () => {
     try {
-      return await User.getUserAutenticado()
+      return await CTRLSesionFrontEnd.getUserAutenticado()
     } catch (e) {}
   }
   const classes = useStyles()

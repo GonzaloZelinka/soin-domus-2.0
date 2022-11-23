@@ -92,7 +92,7 @@ abstract class Inquilino implements I_Inquilino {
     }
   }
 }
-abstract class User implements IUser {
+abstract class CTRLSesion implements IUser {
   _id?: string;
   static getUserAutenticado = (...args: any[]): any => undefined;
   constructor(obj: I_Inquilino) {
@@ -101,4 +101,4 @@ abstract class User implements IUser {
     }
   }
 }
-export { Reclamo, Propiedad, Inquilino, User };
+export { Reclamo, Propiedad, Inquilino, CTRLSesion };

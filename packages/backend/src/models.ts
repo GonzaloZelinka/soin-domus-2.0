@@ -24,6 +24,7 @@ const SPropiedad = new Schema<IPropiedad>({
   pisos: { type: Number, required: true },
   // Referencia al inquilino actual
   inquilino: { type: Schema.Types.ObjectId, ref: "Inquilino", default: null },
+  // Referencia a los reclamos
   reclamos: [{ type: Schema.Types.ObjectId, ref: "Reclamos", default: [] }],
 });
 export const MPropiedad = model("Propiedad", SPropiedad, "propiedades");
@@ -33,6 +34,7 @@ const SReclamo = new Schema<IReclamo>({
   descripcion: { type: String, required: true },
   atencionRequerida: { type: String, required: true },
   inicioInconveniente: { type: Date, required: true },
+  // Array de "referencias" a Propiedades
   propiedad: { type: Schema.Types.ObjectId, ref: "Propiedad", default: null },
   fechaReclamo: { type: Date, requered: true },
 });
